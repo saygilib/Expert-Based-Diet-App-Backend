@@ -1,0 +1,40 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "hayriye",
+      "weight": 54,
+      "height": 174,
+      "gender": "F",
+      "age": 21,
+      "activity": "M",
+      "diseases": [
+        "YYYYNNN"
+      ]
+    },
+    {
+      "id": 2,
+      "name": "veli",
+      "weight": 64,
+      "height": 174,
+      "gender": "M",
+      "age": 21,
+      "activity": "L",
+      "diseases": [
+        "YYYYNNN"
+      ]
+    },
+    {
+      "id": 3,
+      "name": "ahmet Aselsan",
+      "weight": 54,
+      "height": 218,
+      "gender": "F",
+      "age": 56,
+      "activity": "L",
+      "diseases": [
+        "NNNYNYY"
+      ]
+    }
+  ]
+}
