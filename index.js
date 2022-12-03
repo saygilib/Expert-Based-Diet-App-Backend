@@ -130,14 +130,62 @@ app.post("/deleteUser", (req, res) => {
   });
 });
 app.get("/getRec", (req, res) => {
-  fs.readFile("userRecommendations.json",(err,data)=>{
-    if(err) throw err;
-    else{
+  fs.readFile("userRecommendations.json", (err, data) => {
+    if (err) throw err;
+    else {
       res.status(202).send(JSON.parse(data).data[0]);
     }
-  })
-
+  });
 });
+app.post("/postBlogs", (req, res) => {
+  fs.writeFile("blogs.json", JSON.stringify(req.body, null, 2), (err) => {
+    if (err) throw err;
+    else {
+      res.send({
+        message: "File saved",
+      });
+    }
+  });
+});
+app.post("/blogs", (req, res) => {
+  const urls = [
+    "https://www.eatthismuch.com",
+    "https://www.verywellfit.com/recipes-4157077",
+    "https://blogs.webmd.com/diet-nutrition/default.htm",
+    "https://www.onpoint-nutrition.com/blog",
+    "https://diettogo.com/blog",
+    "https://cleananddelicious.com/food-for-thought/weight-loss/",
+  ];
+
+  var blogs = [];
+  fs.readFile("userInfo.json", (err, data) => {
+    if (err) throw err;
+    else {
+      const diseases = JSON.parse(data);
+      let arr = diseases.users[req.body.id - 1].diseases[0];
+      fs.readFile("blogs.json", async (err, data) => {
+        if (err) throw err;
+        else {
+          let json = JSON.parse(data);
+          for (i = 0; i < 7; i++) {
+            if (arr[i] == "Y") {
+              for (j = 0; j < json.diseases[i].length; j++)
+                blogs.push(json.diseases[i][j]);
+            }
+          }
+          blogs.map((item) => {
+            urls.push(item);
+          });
+
+          res.send(urls);
+        }
+      });
+    }
+  });
+
+  // res.send(urls);
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
