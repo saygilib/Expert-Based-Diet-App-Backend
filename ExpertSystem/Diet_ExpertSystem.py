@@ -50,33 +50,36 @@ def calculateBMI(weight, height):
     return round(BMI,2)
 
 def calculateBasalMetobolismSpeed(weight, height, age, gender):
+    print("BASAL MET SPED",weight, height, age, gender)
     Basal = float()
-    if(Genders.get(gender) == 'Female'):
+    if(gender == 'Female'):
         Basal = (10 * weight) + (6.25 * height) - (5 * age) - 161
-    elif(Genders.get(gender) == 'Male'):
+    elif(gender == 'Male'):
         Basal = (10 * weight) + (6.25 * height) - (5 * age) + 5
+    print("BASAL MET SPED",Basal)
     return Basal
 
 def calculateDailyCalorieNeeded(basalMetobolismSpeed, activityLevel):
-    if(ActivityLevels.get(activityLevel) == 'Low'):
+    print(basalMetobolismSpeed, activityLevel)
+    if(activityLevel == 'Low'):
         return basalMetobolismSpeed * 1.2
-    elif(ActivityLevels.get(activityLevel) == 'Medium'):
+    elif(activityLevel == 'Medium'):
         return basalMetobolismSpeed * 1.55
-    elif(ActivityLevels.get(activityLevel) == 'High'):
+    elif(activityLevel == 'High'):
         return basalMetobolismSpeed * 1.725
-    elif(ActivityLevels.get(activityLevel) == 'Extreme'):
+    elif(activityLevel == 'Extreme'):
         return basalMetobolismSpeed * 1.9
 
 def RecommendedProteinIntake(weight, bmi, activityLevel):
     if(bmi>= 30.0):
         return "Your recommended daily protein intake can not be calculated, you should get an advice from nutritions"
-    if(ActivityLevels.get(activityLevel) == 'Low'):
+    if(activityLevel == 'Low'):
         return weight * 0.8
-    elif(ActivityLevels.get(activityLevel) == 'Medium'):
+    elif(activityLevel == 'Medium'):
         return weight * 1.0
-    elif(ActivityLevels.get(activityLevel) == 'High'):
+    elif(activityLevel == 'High'):
         return weight * 1.2
-    elif(ActivityLevels.get(activityLevel) == 'Extreme'):
+    elif(activityLevel == 'Extreme'):
         return weight * 1.5
 
 def findAgeGroup(age):
@@ -133,6 +136,7 @@ def findIfBmiAcceptable(bmi, ageGroup):
     return False
 
 def RecommendedCalorieIntake(bmiIsAcceptable, bodyStateGroup, dailyCalorieNeed):
+    print("RECCOMENDED CALORie",bmiIsAcceptable, bodyStateGroup, dailyCalorieNeed)
     if(bmiIsAcceptable):
         return dailyCalorieNeed
     elif(bodyStateGroup == BodyStateGroups['BMI 18.5-']):
@@ -227,16 +231,14 @@ def main():
     Height = int(sys.argv[1])
     Weight = int(sys.argv[2])
     Age = int(sys.argv[3])
-    Gender = sys.argv[4]
+    Gender = str(sys.argv[4])
     ActivityLevel = sys.argv[5]
-    
-    print("If you have the disease enter Y to add it to your restricted diet list, if you do not have the disease enter N.")
-    for disease in Diseases:
-        for i in range(0, 7):
-           approval = sys.argv[6][i]
+    d = sys.argv[6].split(",")
+    for i in range(len(Diseases)):
+        approval = d[i]
         
-        if(approval == 'Y'):
-            RestrictedFoodsRuleChain(disease)
+        if(approval == "true"):
+            RestrictedFoodsRuleChain(Diseases[i])
     AgeGroup = findAgeGroup(Age)
     bmi = calculateBMI(Weight, Height)
     basalMetobolismSpeed = calculateBasalMetobolismSpeed(Weight, Height, Age, Gender)

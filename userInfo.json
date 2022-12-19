@@ -2,38 +2,38 @@
   "users": [
     {
       "id": 1,
-      "name": "hayriye",
-      "weight": 54,
-      "height": 174,
-      "gender": "F",
-      "age": 21,
-      "activity": "M",
+      "name": "gfhfgh",
+      "weight": "65",
+      "height": "166",
+      "gender": "Male",
+      "age": "35",
+      "activity": "Medium",
       "diseases": [
-        "YYYYNNN"
+        false,
+        false,
+        true,
+        false,
+        false,
+        false,
+        false
       ]
     },
     {
       "id": 2,
-      "name": "veli",
-      "weight": 64,
-      "height": 174,
-      "gender": "M",
-      "age": 21,
-      "activity": "L",
+      "name": "burak",
+      "weight": "64",
+      "height": "180",
+      "gender": "Male",
+      "age": "22",
+      "activity": "Low",
       "diseases": [
-        "YYYYNNN"
-      ]
-    },
-    {
-      "id": 3,
-      "name": "ahmet Aselsan",
-      "weight": 54,
-      "height": 218,
-      "gender": "F",
-      "age": 56,
-      "activity": "L",
-      "diseases": [
-        "NNNYNYY"
+        false,
+        false,
+        false,
+        false,
+        true,
+        false,
+        false
       ]
     }
   ]

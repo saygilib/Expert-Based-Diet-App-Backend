@@ -10,33 +10,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cors());
 
-app.post("/expert", (req, res) => {
-  const python = spawn("python3", [
-    "./ExpertSystem/Diet_ExpertSystem.py",
-    req.body.height,
-    req.body.weight,
-    req.body.age,
-    req.body.gender,
-    req.body.activity,
-    req.body.diseases,
-  ]);
 
-  python.stdout.on("data", function (data) {
-    console.log("Pipe data from python script ...");
-    console.log(data.toString());
-    res.send(data);
-  });
-
-  python.stderr.on("data", (data) => {
-    console.error(`stderr: ${data}`);
-  });
-
-  python.on("exit", (code) => {
-    console.log(`child process close all stdio with code ${code}`);
-  });
-});
 
 app.post("/postUserInfo", (req, res) => {
+  console.log(req.body);
   fs.readFile("userInfo.json", (err, data) => {
     if (err) throw err;
     else {
@@ -49,11 +26,10 @@ app.post("/postUserInfo", (req, res) => {
         height: req.body.height,
         gender: req.body.gender,
         age: req.body.age,
-        activity: req.body.activity,
+        activity: req.body.activityLevel,
         diseases: req.body.diseases,
       };
       json.users.push(data2);
-      console.log(json);
       fs.writeFile("userInfo.json", JSON.stringify(json, null, 2), (err) => {
         if (err) throw err;
         else {
@@ -92,18 +68,18 @@ app.post("/alterUser", (req, res) => {
         height: req.body.height,
         gender: req.body.gender,
         age: req.body.age,
-        activity: req.body.activity,
+        activity: req.body.activityLevel,
         diseases: req.body.diseases,
       };
-      json.users[req.body.id - 1] = data2;
-      console.log(json);
+      console.log(req.body);
+      json.users[req.body.id] = data2;
+      // console.log(json);
       fs.writeFile("userInfo.json", JSON.stringify(json, null, 2), (err) => {
         if (err) throw err;
         else {
           console.log("File saved");
-          res.send({
-            message: "File saved",
-          });
+          res.send(res.redirect('/expert')
+          );
         }
       });
     }
@@ -129,14 +105,45 @@ app.post("/deleteUser", (req, res) => {
     }
   });
 });
-app.get("/getRec", (req, res) => {
+
+app.post("/expert", (req, res) => {
+  console.log("this is my body",req.body);
+  const python = spawn("python3", [
+    "./ExpertSystem/Diet_ExpertSystem.py",
+    req.body.height,
+    req.body.weight,
+    req.body.age,
+    req.body.gender,
+    req.body.activity,
+    req.body.diseases,
+  ]);
+
+  python.stdout.on("data", function (data) {
+    console.log("Pipe data from python script ...");
+    console.log(data.toString());
+    res.send(data);
+  });
+
+  python.stderr.on("data", (data) => {
+    console.error(`stderr: ${data}`);
+  });
+
+  python.on("exit", (code) => {
+    console.log(`child process close all stdio with code ${code}`);
+  });
+  res.send(req.body)
+})
+app.post("/getRec", (req, res) => {
+ 
   fs.readFile("userRecommendations.json", (err, data) => {
     if (err) throw err;
     else {
-      res.status(202).send(JSON.parse(data).data[0]);
+      res.status(202).send(JSON.parse(data));
     }
   });
 });
+
+
 app.post("/postBlogs", (req, res) => {
   fs.writeFile("blogs.json", JSON.stringify(req.body, null, 2), (err) => {
     if (err) throw err;
@@ -182,10 +189,8 @@ app.post("/blogs", (req, res) => {
       });
     }
   });
-
-  // res.send(urls);
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(` Server running on port ${PORT}`);
 });
